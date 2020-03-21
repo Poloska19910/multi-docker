@@ -1,0 +1,22 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t paolodat/react-test -f ./client/Dockerfile.dev ./client
+    
+script:
+    - docker run -e CI=true paolodat/react-test npm run test
+
+after_success:
+    - docker build -t paolodat/multi-client ./client
+    - docker build -t paolodat/multi-nginx ./nginx
+    - docker build -t paolodat/multi-server ./server
+    - docker build -t paolodat/multi-worker ./worker
+
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    - docker push paolodat/multi-client
+    - docker push paolodat/multi-nginx
+    - docker push paolodat/multi-server
+    - docker push paolodat/multi-worker
+
