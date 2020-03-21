@@ -15,7 +15,7 @@ after_success:
     - docker build -t paolodat/multi-worker ./worker
 
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-    - docker push paolodat/multi-client:latest
+    - docker push paolodat/multi-client
     - docker push paolodat/multi-nginx
     - docker push paolodat/multi-server
     - docker push paolodat/multi-worker
